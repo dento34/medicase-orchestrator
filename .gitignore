@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Node / patient-app
+node_modules/
+.next/
+dist/
+build/
+.npm
+.yarn
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# UiPath
+*.nupkg
+.uipath/
+.local/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Output / artifacts
+out/
+coverage/
+.cache/
+
+# Claude Code logs are tracked, but exclude raw session dumps
+claude-code-log/sessions/raw/
