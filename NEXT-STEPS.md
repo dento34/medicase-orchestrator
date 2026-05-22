@@ -4,28 +4,15 @@
 
 ## Right now (next 1 hour)
 
-### 1. GitHub repo + first push
+### 1. GitHub repo + first push ✅ DONE
 
-Open a terminal in this folder (`medicase-orchestrator/`) and run:
-
-```bash
-git init
-git add .
-git commit -m "Initial scaffold: README, docs, agent specs, demo script"
-```
-
-Then on github.com:
-- Create a new **public** repo named `medicase-orchestrator`
-- Don't add a README from the GitHub UI (we have one)
-- Copy the "push existing repo" commands GitHub shows you, e.g.:
+Local repo initialized (`e643a17`), remote `origin` set to https://github.com/dento34/medicase-orchestrator.git, README placeholders replaced with `dento34`. Push pending — run from this folder:
 
 ```bash
-git remote add origin https://github.com/<your-user>/medicase-orchestrator.git
-git branch -M main
 git push -u origin main
 ```
 
-After push, search the README and replace every `<your-user>` placeholder with your actual GitHub username.
+(GitHub will prompt for auth — sign in via the popup or supply a Personal Access Token.)
 
 ### 2. Calendar these UiPath live sessions
 
@@ -64,7 +51,8 @@ When you get the email confirmation from `Andreea from the UiPath Community team
 ## This week's milestones
 
 - [ ] GitHub repo public, first commit pushed
-- [ ] All `<your-user>` placeholders replaced in README
+- [x] All `<your-user>` placeholders replaced (now `dento34`)
+- [ ] `git push -u origin main` executed
 - [ ] All UiPath live sessions on calendar
 - [ ] UiPath Academy: at least 2 intro modules completed
 - [ ] Devpost project page: paste draft content from `submission/devpost-project-page.md` as **a draft** (you can keep updating until 29 Jun)

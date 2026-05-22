@@ -121,7 +121,7 @@ The submission video must show the working solution running on UiPath, walk thro
 
 **Voiceover:** "FIFA 2026 is a vivid demo. Hajj 2027 is two million pilgrims, a hundred languages, real heat-stroke risk. LA 2028 is 200 nation states under one roof. Same case flow, same agents — different deployment. MediCase Orchestrator. Built on UiPath Maestro. Ready to ship."
 
-**End card:** github.com/<your-user>/medicase-orchestrator · UiPath AgentHack 2026
+**End card:** github.com/dento34/medicase-orchestrator · UiPath AgentHack 2026
 
 ---
 

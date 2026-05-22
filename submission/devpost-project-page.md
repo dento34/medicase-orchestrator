@@ -57,7 +57,7 @@ Humans stay in the loop at every critical decision point. The system handles unc
 
 ### UiPath for Coding Agents (bonus)
 
-All three coded agents were scaffolded with **Claude Code** via the UiPath CLI integration. See [`claude-code-log/`](https://github.com/<your-user>/medicase-orchestrator/tree/main/claude-code-log) for prompt session exports, summaries, and commit-level evidence.
+All three coded agents were scaffolded with **Claude Code** via the UiPath CLI integration. See [`claude-code-log/`](https://github.com/dento34/medicase-orchestrator/tree/main/claude-code-log) for prompt session exports, summaries, and commit-level evidence.
 
 ## Challenges we ran into
 
@@ -99,7 +99,7 @@ Same case flow, same agents — different deployment.
 
 ## Try it out
 
-- **GitHub:** https://github.com/<your-user>/medicase-orchestrator
+- **GitHub:** https://github.com/dento34/medicase-orchestrator
 - **Demo video:** [YouTube link by 29 Jun]
 - **Presentation deck:** [Drive link by 29 Jun]
 

@@ -59,7 +59,7 @@ Quick start (preliminary):
 ```bash
 # 1. UiPath Labs access (request via https://bit.ly/agenthack26form)
 # 2. Clone this repo
-git clone https://github.com/<your-user>/medicase-orchestrator.git
+git clone https://github.com/dento34/medicase-orchestrator.git
 cd medicase-orchestrator
 
 # 3. Python deps for coded agents
