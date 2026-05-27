@@ -79,4 +79,18 @@ REAL mode — SKIPPED (no ANTHROPIC_API_KEY in .env)
 
 ## Commit reference
 
-Will be linked here after commit (single batch).
+[`52b49ae`](https://github.com/dento34/medicase-orchestrator/commit/52b49ae) — single batch, 12 new files, ~600 lines.
+
+## Verification
+
+Run from project root:
+
+```bash
+.venv/Scripts/python.exe agents/language_agent/tests/test_smoke.py
+```
+
+Expected output (MOCK mode):
+- Detected: Portuguese (pt), confidence 0.92
+- 5 questions translated (e.g. "Onde está doendo?", "Numa escala de 0 a 10…")
+- Patient reply parsed: chest pain 8/10, penicillin allergy, Losartan, hypertension
+- All assertions pass

@@ -57,6 +57,6 @@ Update the table below as we go:
 
 | # | Date | Session file | What | Commit |
 |---|---|---|---|---|
-| 1 | TBD | — | — | — |
+| 1 | 2026-05-27 | [language-agent first scaffold](sessions/2026-05-27_language-agent_first-scaffold.md) | Built LanguageAgent end-to-end: models, prompts, LLM abstraction, mock+real smoke test | [`52b49ae`](https://github.com/dento34/medicase-orchestrator/commit/52b49ae) |
 | 2 | TBD | — | — | — |
 | 3 | TBD | — | — | — |
