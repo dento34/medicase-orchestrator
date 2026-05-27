@@ -1,0 +1,32 @@
+{
+  "default_questions_en": [
+    "Where does it hurt?",
+    "On a scale of 0 to 10, how strong is the pain?",
+    "Do you have any allergies?",
+    "Are you taking any medication right now?",
+    "Do you have any chronic conditions, like diabetes or heart problems?"
+  ],
+  "extended_questions_en": [
+    "When did the pain start?",
+    "Have you had this before?",
+    "Are you pregnant?",
+    "Have you eaten or drunk anything in the last hour?",
+    "Do you have someone we can contact for you?"
+  ],
+  "supported_languages_v1": [
+    {"code": "es", "name": "Spanish"},
+    {"code": "pt", "name": "Portuguese"},
+    {"code": "ar", "name": "Arabic"},
+    {"code": "fr", "name": "French"},
+    {"code": "de", "name": "German"},
+    {"code": "ja", "name": "Japanese"},
+    {"code": "ko", "name": "Korean"},
+    {"code": "nl", "name": "Dutch"},
+    {"code": "zh", "name": "Mandarin Chinese"},
+    {"code": "ru", "name": "Russian"},
+    {"code": "hi", "name": "Hindi"},
+    {"code": "tr", "name": "Turkish"},
+    {"code": "wo", "name": "Wolof"},
+    {"code": "ary", "name": "Moroccan Darija"}
+  ]
+}
