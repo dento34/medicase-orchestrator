@@ -64,9 +64,10 @@ This document specifies the five agents that operate within the Maestro Case. Ea
 - Ambulance ETA (best available estimate)
 
 **Data sources:**
-- OpenStreetMap `emergency=defibrillator` nodes (free, open)
+- OpenStreetMap `emergency=defibrillator` nodes (free, open) — Overpass primary + 2 fallback instances
 - AED Locator API (fallback, registered events)
-- RxNav drug interaction API (NIH, free)
+- RxNav RxCUI resolution (NIH, free, still served)
+- LLM-based drug-interaction analysis (Claude) — NIH retired the public `/interaction/*` endpoints in 2024
 - Event operations API for ambulance position (mock during demo)
 
 **Failure mode:** If primary API fails, fall back to secondary source. If both fail, flag stage as "manual lookup required" and surface to medic.

@@ -1,0 +1,33 @@
+{
+  "case_id": "case-2026-05-27-001",
+  "aeds": [
+    {
+      "osm_id": 7001379687,
+      "lat": 51.5081902,
+      "lon": -0.1248398,
+      "distance_m": 222.9,
+      "name": null,
+      "indoor": true,
+      "access": null,
+      "description": null
+    },
+    {
+      "osm_id": 7001379688,
+      "lat": 51.5077181,
+      "lon": -0.124447,
+      "distance_m": 234.7,
+      "name": null,
+      "indoor": true,
+      "access": null,
+      "description": null
+    }
+  ],
+  "drug_interactions": [],
+  "ambulance": {
+    "eta_minutes": 9,
+    "confidence": 0.91,
+    "unit_id": "AMB-051",
+    "source": "mock"
+  },
+  "warnings": []
+}
