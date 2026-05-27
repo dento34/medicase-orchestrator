@@ -140,6 +140,38 @@ def main() -> int:
             True,
             {200},
         ),
+        # Maestro / Case Management — endpoint URL is undocumented for our
+        # tenant; probe several plausible shapes to discover the real one.
+        (
+            "6. Maestro root (maestro_)",
+            f"{tenant_url}/maestro_/api/v1/instances?pageSize=5",
+            True,
+            {200},
+        ),
+        (
+            "7. Maestro alt path (orchestration_)",
+            f"{tenant_url}/orchestrator_/api/Maestro/Processes?pageSize=5",
+            True,
+            {200},
+        ),
+        (
+            "8. Process Apps (apps_)",
+            f"{tenant_url}/apps_/api/v1/apps?pageSize=5",
+            True,
+            {200},
+        ),
+        (
+            "9. Studio Web projects",
+            f"{tenant_url}/studio_/api/v1/projects?pageSize=5",
+            True,
+            {200},
+        ),
+        (
+            "10. Document Understanding",
+            f"{tenant_url}/du_/api/framework/projects?pageSize=5",
+            True,
+            {200},
+        ),
     ]
 
     any_ok = False
