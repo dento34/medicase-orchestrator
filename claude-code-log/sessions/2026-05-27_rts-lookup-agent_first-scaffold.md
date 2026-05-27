@@ -81,7 +81,7 @@ built for LanguageAgent. Filed for the next session.
 
 ## Commit reference
 
-[`<pending>`](https://github.com/dento34/medicase-orchestrator/) — to be linked.
+[`37da087`](https://github.com/dento34/medicase-orchestrator/commit/37da087)
 
 ## Verification
 
