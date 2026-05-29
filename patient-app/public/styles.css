@@ -1,0 +1,209 @@
+:root {
+  --blue: #0b5cad;
+  --blue-dark: #08406f;
+  --green: #1a7f4b;
+  --red: #c62828;
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --text: #16202b;
+  --muted: #5b6b7b;
+  --radius: 16px;
+  --tap: 64px;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+#app {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 20px 18px 40px;
+  min-height: 100vh;
+}
+
+.boot {
+  text-align: center;
+  color: var(--muted);
+  padding-top: 40vh;
+}
+
+/* Header */
+.hdr {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.hdr .pulse {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 0 rgba(26, 127, 75, 0.5);
+  animation: pulse 1.6s infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(26, 127, 75, 0.5); }
+  70% { box-shadow: 0 0 0 14px rgba(26, 127, 75, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(26, 127, 75, 0); }
+}
+.hdr h1 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: 700;
+  color: var(--blue-dark);
+}
+.hdr .sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Reassurance banner */
+.reassure {
+  background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.reassure p {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Question card */
+.q-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  box-shadow: 0 4px 16px rgba(11, 92, 173, 0.08);
+  margin-bottom: 18px;
+}
+.q-progress {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.q-text {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 18px;
+}
+
+/* Buttons */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: var(--tap);
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 12px;
+  padding: 0 16px;
+}
+.btn-primary { background: var(--blue); color: #fff; }
+.btn-primary:active { background: var(--blue-dark); }
+.btn-mic { background: var(--green); color: #fff; }
+.btn-mic.listening { background: var(--red); animation: pulse 1.2s infinite; }
+.btn-ghost { background: #eaf1f9; color: var(--blue-dark); }
+.btn-speak { background: #eaf1f9; color: var(--blue-dark); min-height: 48px; font-size: 15px; }
+
+/* Tap-cards: body map */
+.tapgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.tap {
+  background: #eef3f9;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  min-height: 84px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.tap .emoji { font-size: 30px; }
+.tap.selected { border-color: var(--blue); background: #dceafa; }
+
+/* Pain scale */
+.scale {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+.scale button {
+  min-height: 52px;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* Heard text */
+.heard {
+  background: #f0f6ff;
+  border-left: 4px solid var(--blue);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  color: var(--text);
+  margin-bottom: 12px;
+  min-height: 22px;
+}
+
+/* Done screen */
+.done {
+  text-align: center;
+  padding-top: 8vh;
+}
+.done .check {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  font-size: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+.done h2 { font-size: 24px; margin: 0 0 8px; }
+.done p { color: var(--muted); }
+
+.privacy {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 18px 24px;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
