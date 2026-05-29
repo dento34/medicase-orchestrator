@@ -1,54 +1,61 @@
-"""UiPath Coded Agent entrypoint — SummaryAgent (Maestro Stage 3: Handoff).
+"""UiPath Coded Agent entrypoint — MediCase dispatcher.
 
-Typed Pydantic in/out so UiPath `uipath init` can generate a clean I/O
-schema that Maestro can map field-by-field. The actual logic lives in the
-shared `agents` package (template-driven handoff; never LLM for critical
-clinical fields).
+The hackathon staging tenant allows a single published process in the
+personal workspace, and the Maestro agent picker binds a package to its
+first entrypoint (no per-node entrypoint selection). To wire ALL FOUR coded
+agents into the Maestro flow under that one-process limit, this single
+entrypoint dispatches to the right agent based on the `agent` input:
+
+    agent = "language"  -> LanguageAgent   (Stage 1 Intake)
+    agent = "rts"       -> RTSLookupAgent   (Stage 2 Stabilization)
+    agent = "summary"   -> SummaryAgent     (Stage 3 Handoff)
+    agent = "compliance"-> ComplianceAgent  (Stage 4 Post-incident)
+
+Each Maestro node binds to this same process and sets `agent` to its stage
+plus a `payload` matching that agent's entry contract (see agents/uipath/*).
+The typed per-agent entrypoints (main_language.py, main_rts.py, etc.) remain
+in the repo as documentation of each agent's I/O contract.
 """
 from __future__ import annotations
 
-from typing import Any, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
-from agents.uipath.summary_entry import run as _summary_run
+from agents.uipath import (
+    compliance_entry,
+    language_entry,
+    rts_entry,
+    summary_entry,
+)
+
+_ROUTES = {
+    "language": language_entry.run,
+    "rts": rts_entry.run,
+    "summary": summary_entry.run,
+    "compliance": compliance_entry.run,
+}
 
 
-class PatientSnapshotIn(BaseModel):
-    name: Optional[str] = None
-    approx_age: Optional[str] = Field(default=None, description="e.g. '35-45'")
-    sex: Optional[str] = None
-    language_name: Optional[str] = None
-    language_code: Optional[str] = None
-    symptoms: list[str] = Field(default_factory=list)
-    pain_location: Optional[str] = None
-    pain_scale: Optional[int] = None
-    allergies: list[str] = Field(default_factory=list)
-    medications: list[str] = Field(default_factory=list)
-    chronic_conditions: list[str] = Field(default_factory=list)
-    wearable_snapshot: Optional[dict[str, Any]] = None
-
-
-class SummaryInput(BaseModel):
-    case_id: str
-    patient: PatientSnapshotIn
-    location: Optional[str] = None
-    nearest_aed: Optional[str] = None
-    ambulance_eta_min: Optional[int] = None
-    drug_warnings: list[str] = Field(default_factory=list)
-    handed_off_by: Optional[str] = None
-    accepted_by: Optional[str] = None
-    with_impression: bool = Field(
-        default=False,
-        description="If true, adds an LLM clinical impression (needs API key).",
+class DispatchInput(BaseModel):
+    agent: str = Field(description="language | rts | summary | compliance")
+    payload: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Input for the selected agent (see agents/uipath/*_entry.py)",
     )
 
 
-class SummaryOutput(BaseModel):
-    rendered_text: str = Field(description="Human-readable handoff card")
-    report: dict[str, Any] = Field(description="Structured HandoffReport")
+class DispatchOutput(BaseModel):
+    agent: str = Field(description="Which agent was invoked")
+    result: dict[str, Any] = Field(description="The selected agent's output")
 
 
-def main(input: SummaryInput) -> SummaryOutput:
-    out = _summary_run(input.model_dump())
-    return SummaryOutput(rendered_text=out["rendered_text"], report=out["report"])
+def main(input: DispatchInput) -> DispatchOutput:
+    key = (input.agent or "").strip().lower()
+    fn = _ROUTES.get(key)
+    if fn is None:
+        raise ValueError(
+            f"Unknown agent {input.agent!r}. "
+            f"Expected one of: {', '.join(_ROUTES)}"
+        )
+    return DispatchOutput(agent=key, result=fn(input.payload))

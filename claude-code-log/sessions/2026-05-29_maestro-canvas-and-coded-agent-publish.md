@@ -68,6 +68,27 @@ published to the personal workspace — Orchestrator process id 2151660 — whic
 validated the end-to-end pack/publish path before consolidating into the
 4-entrypoint package.)
 
+## Tenant constraint discovered → dispatcher pattern
+
+While binding the coded agents in the canvas we found two hard limits of the
+hackathon **staging** tenant:
+
+1. The Maestro agent picker only lists **personal-workspace processes** (not
+   the tenant package feed), and the workspace is capped at **1 process**.
+2. Binding a multi-entrypoint package always uses its **first entrypoint** —
+   there is no per-node entrypoint selector, and no "Shared" folder exists to
+   deploy multiple processes into.
+
+So a single multi-entrypoint package could not expose 4 distinct bindable
+agents. The fix: `main.py` was turned into a **dispatcher** (entrypoint
+`MediCaseCodedAgent`) that routes on an `agent` input
+(`language|rts|summary|compliance`) to the matching `agents/uipath/*_entry.py`.
+All four Maestro coded nodes bind to this one published process and set
+`agent` per stage with a `payload` matching that agent's contract. Published
+as `medicase-coded-summary` v0.4.0 (workspace process 2151660). The typed
+per-agent entrypoints (`main_language.py`, `main_rts.py`, `main_summary.py`,
+`main_compliance.py`) stay in the repo as the documented I/O contracts.
+
 ## What remains (canvas, human)
 
 - Bind each of the four coded-agent Maestro nodes to the matching entrypoint of

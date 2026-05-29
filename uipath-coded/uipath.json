@@ -12,9 +12,6 @@
   },
   "functions": {},
   "agents": {
-    "LanguageAgent": "main_language.py:main",
-    "RTSLookupAgent": "main_rts.py:main",
-    "SummaryAgent": "main.py:main",
-    "ComplianceAgent": "main_compliance.py:main"
+    "MediCaseCodedAgent": "main.py:main"
   }
 }
