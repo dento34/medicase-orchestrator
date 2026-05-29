@@ -25,6 +25,10 @@ class RTSLookupRequest(BaseModel):
         default_factory=list,
         description="Drugs we are considering administering on-site",
     )
+    patient_conditions: list[str] = Field(
+        default_factory=list,
+        description="Chronic conditions; sharpens drug-interaction analysis",
+    )
     aed_radius_m: int = 200
 
 

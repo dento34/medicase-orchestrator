@@ -86,6 +86,23 @@ SUMMARY_FIXTURE = {
         "irregular tachycardia with chest pain in a hypertensive patient."
     )
 }
+RTS_DRUG_FIXTURE = {
+    "Drugs": json.dumps(
+        {
+            "interactions": [
+                {
+                    "drug_a": "Losartan",
+                    "drug_b": "Nitroglycerin",
+                    "severity": "moderate",
+                    "description": (
+                        "Additive hypotensive effect; monitor blood pressure "
+                        "before and after administration."
+                    ),
+                }
+            ]
+        }
+    )
+}
 
 
 def banner(stage: str, title: str) -> None:
@@ -146,12 +163,14 @@ def main() -> int:
 
         # ---------------- Stage 2: Stabilization ----------------------------
         banner("STAGE 2", "Stabilization — RTSLookupAgent")
-        rts = RTSLookupAgent()
+        rts_llm = None if use_real_llm else MockClient(RTS_DRUG_FIXTURE)
+        rts = RTSLookupAgent(llm=rts_llm) if rts_llm else RTSLookupAgent()
         rts_req = RTSLookupRequest(
             case_id=case_id,
             location=GeoPoint(lat=51.5074, lon=-0.1278),  # demo coord
             medications=s.get("medications", []),
             proposed_treatments=["Nitroglycerin", "Aspirin"],
+            patient_conditions=s.get("chronic_conditions", []),
             aed_radius_m=300,
         )
         rts_result = rts.lookup(rts_req)

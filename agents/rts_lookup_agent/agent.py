@@ -17,6 +17,7 @@ import os
 from . import aed as aed_mod
 from . import ambulance as ambulance_mod
 from . import drug as drug_mod
+from . import drug_llm as drug_llm_mod
 from .models import (
     AedLocation,
     AmbulanceEta,
@@ -24,6 +25,7 @@ from .models import (
     RTSLookupRequest,
     RTSLookupResult,
 )
+from ..shared.llm import LLMClient
 from ..shared.logging import get_logger
 
 logger = get_logger("rts_lookup_agent")
@@ -40,11 +42,35 @@ def _safe(fn, label: str, warnings: list[str]):
         return None
 
 
+def _drug_lookup(
+    drug_inputs: list[str],
+    conditions: list[str],
+    llm: LLMClient | None,
+) -> list[DrugInteraction]:
+    """Resolve RxCUIs (normalization) then analyze interactions.
+
+    RxNav's interaction endpoint is retired, so when an LLM is available we
+    use it for the actual interaction analysis. RxCUI resolution still runs
+    because it normalizes drug names and proves the drug exists.
+    """
+    # RxCUI resolution — best-effort, for normalization + citations.
+    for name in drug_inputs:
+        drug_mod.name_to_rxcui(name)
+
+    if llm is not None:
+        return drug_llm_mod.check_interactions_llm(
+            drug_inputs, llm, patient_conditions=conditions
+        )
+    # No LLM: fall back to (now mostly-empty) RxNav path.
+    return drug_mod.check_interactions(drug_inputs)
+
+
 class RTSLookupAgent:
     """Parallel RTS lookup orchestrator for Stage 2."""
 
-    def __init__(self, *, max_workers: int = 4):
+    def __init__(self, *, max_workers: int = 4, llm: LLMClient | None = None):
         self.max_workers = max_workers
+        self.llm = llm
 
     def lookup(self, request: RTSLookupRequest) -> RTSLookupResult:
         logger.info(
@@ -67,10 +93,14 @@ class RTSLookupAgent:
                 "aed",
                 warnings,
             )
-            drug_inputs = list(set(request.medications + request.proposed_treatments))
+            drug_inputs = list(
+                dict.fromkeys(request.medications + request.proposed_treatments)
+            )
             f_drug = pool.submit(
                 _safe,
-                lambda: drug_mod.check_interactions(drug_inputs),
+                lambda: _drug_lookup(
+                    drug_inputs, request.patient_conditions, self.llm
+                ),
                 "drug",
                 warnings,
             )
