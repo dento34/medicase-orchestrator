@@ -67,7 +67,7 @@ changes.
 
 ## Commit reference
 
-`<pending>` — to be linked.
+[`61a50bb`](https://github.com/dento34/medicase-orchestrator/commit/61a50bb)
 
 ## Verification
 
