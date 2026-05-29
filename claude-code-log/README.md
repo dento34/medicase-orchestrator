@@ -59,4 +59,5 @@ Update the table below as we go:
 |---|---|---|---|---|
 | 1 | 2026-05-27 | [language-agent first scaffold](sessions/2026-05-27_language-agent_first-scaffold.md) | Built LanguageAgent end-to-end: models, prompts, LLM abstraction, mock+real smoke test | [`52b49ae`](https://github.com/dento34/medicase-orchestrator/commit/52b49ae) |
 | 2 | 2026-05-27 | [rts-lookup-agent first scaffold](sessions/2026-05-27_rts-lookup-agent_first-scaffold.md) | Built RTSLookupAgent: AED (OSM), drug interaction (RxNav), ambulance ETA mock, parallel coordinator with safe-failure wrapper. LIVE smoke test against real APIs | [`37da087`](https://github.com/dento34/medicase-orchestrator/commit/37da087) |
-| 3 | TBD | — | — | — |
+| 3 | 2026-05-27 | [compliance-agent first scaffold](sessions/2026-05-27_compliance-agent_first-scaffold.md) | Built ComplianceAgent: SQLite audit log + anonymized case memory + learning-loop query | [`c293f4d`](https://github.com/dento34/medicase-orchestrator/commit/c293f4d) |
+| 4 | 2026-05-27 | [summary-agent + demo runner](sessions/2026-05-27_summary-agent-and-demo-runner.md) | Built SummaryAgent (template-driven handoff) + end-to-end demo_runner chaining all 4 coded agents (4.8s) | pending |

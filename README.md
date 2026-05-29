@@ -54,22 +54,38 @@ Significant portions of this solution were scaffolded using **Claude Code** thro
 
 > Detailed setup is being completed during the development period (May–June 2026).
 
-Quick start (preliminary):
-
 ```bash
-# 1. UiPath Labs access (request via https://bit.ly/agenthack26form)
-# 2. Clone this repo
+# 1. Clone
 git clone https://github.com/dento34/medicase-orchestrator.git
 cd medicase-orchestrator
 
-# 3. Python deps for coded agents
-pip install -r agents/requirements.txt
+# 2. Python env for coded agents
+python -m venv .venv
+.venv/Scripts/python.exe -m pip install anthropic python-dotenv pydantic
 
-# 4. Patient mini web app
-cd patient-app && npm install && npm run dev
+# 3. Copy env template and fill in values
+cp .env.example .env       # then edit: UIPATH_PAT, (optional) ANTHROPIC_API_KEY
+
+# 4. Run the end-to-end demo (chains all 4 coded agents)
+.venv/Scripts/python.exe agents/demo_runner.py
 ```
 
-Full setup instructions, environment variables, and UiPath Cloud configuration steps will be in this section by submission deadline.
+The demo runs with zero secrets: LLM calls fall back to deterministic mocks
+unless `ANTHROPIC_API_KEY` is set, and RTS lookups run live against free
+public APIs (OpenStreetMap, NIH RxNav) unless `RTS_OFFLINE=1`.
+
+### Status of the coded agents
+
+| Agent | Stage | Status | Verify |
+|---|---|---|---|
+| LanguageAgent | 1 Intake | ✅ built + tested | `agents/language_agent/tests/test_smoke.py` |
+| RTSLookupAgent | 2 Stabilization | ✅ built + tested (live OSM) | `agents/rts_lookup_agent/tests/test_smoke.py` |
+| SummaryAgent | 3 Handoff | ✅ built + tested | `agents/summary_agent/tests/test_smoke.py` |
+| ComplianceAgent | 4 Post-incident | ✅ built + tested | `agents/compliance_agent/tests/test_smoke.py` |
+| TriageAgent | 1 Intake | ⏳ low-code (UiPath Agent Builder) | — |
+| RoutingAgent | 2 Stabilization | ⏳ low-code (UiPath Agent Builder) | — |
+
+End-to-end: `agents/demo_runner.py` chains all 4 coded agents in ~5s.
 
 ---
 
