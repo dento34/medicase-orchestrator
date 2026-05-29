@@ -99,22 +99,28 @@ Verified the coded agent across every layer we could:
 | **UiPath runtime contract** | `uipath run MediCaseCodedAgent <input>` | **PASS** — produced the real PATIENT HANDOFF, `agent=summary`, `case_id=demo-verify` |
 | Publish | `uipath publish --my-workspace` | PASS (process 2151660) |
 | Remote job creation | `uipath invoke MediCaseCodedAgent` | PASS — a real Orchestrator job starts |
-| Serverless execution | job final state | **Faulted — "Failed to prepare environment"** |
+| **Serverless cloud execution** | `uipath invoke` job final state | **PASS (v0.7.0)** — `compliance` and `summary` both ran on the UiPath serverless runtime and returned correct output (the real PATIENT HANDOFF rendered remotely) |
 
-Findings while debugging the serverless run:
-1. v0.4.0 (no `uipath` dep) faulted with `exec: uipath: not found` → the
-   serverless runner needs `uipath` on PATH. Added `uipath>=2.10` to deps.
-2. v0.5.0 / v0.6.0 (with `uipath` dep, even slimmed to just
-   `uipath==2.10.73` + `python-dotenv`) faulted at **"An error occurred while
-   installing the package dependencies."** — i.e. the runner cannot prepare
-   the execution environment at all.
+### Root cause of the earlier serverless faults (and the fix)
 
-This is consistent with the tenant-wide **"No license detected for the user"**
-banner shown throughout the canvas: the hackathon **staging** tenant accepts
-publish + job creation but lacks the entitlement (AI units / serverless robot
-license) to provision a coded-agent execution environment. The agent code is
-proven correct under the official UiPath runtime via `uipath run`; only the
-cloud serverless execution is gated by the staging account's licensing.
+The first cloud runs faulted, debugged in order:
+1. v0.4.0 (no `uipath` dep) → `exec: uipath: not found`. The serverless
+   runner needs `uipath` on PATH → added `uipath>=2.10` to deps.
+2. v0.5.0 / v0.6.0 → `"Failed to prepare environment / install
+   dependencies"`. Two real causes, found via `uv lock`:
+   - **`requires-python` was `>=3.10`, but `uipath` requires `>=3.11`** →
+     the dependency set was unsatisfiable, so the runner's install step
+     failed.
+   - **No `uv.lock`** — the serverless runtime installs from a lock file
+     (`uipath.json` had `includeUvLock: true`), which we hadn't generated.
+3. **Fix (v0.7.0):** set `requires-python = ">=3.11"` and ran `uv lock`
+   (62 packages, CPython 3.12). Republished → job state **Successful**,
+   correct JSON output returned from the cloud.
+
+Note: user licenses (Pro/Plus) were also allocated to the account during this
+session, and there are 2 Production (Unattended) Robots + a Maestro license in
+the tenant — but the actual blocker was the Python-version / lockfile packaging
+issue above, not entitlement.
 
 ## What remains (canvas, human)
 

@@ -1,9 +1,9 @@
 [project]
 name = "medicase-coded-summary"
-version = "0.6.0"
+version = "0.7.0"
 description = "MediCase coded agents (Language, RTSLookup, Summary, Compliance) for UiPath Maestro"
 authors = [{ name = "MediCase Orchestrator Team" }]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "uipath>=2.10",
     "pydantic>=2",
