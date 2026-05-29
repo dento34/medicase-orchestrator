@@ -63,4 +63,7 @@ The coded side is complete and contract-stable. Remaining UiPath-canvas work
 
 ## Commit reference
 
-`<pending>` — to be linked.
+[`8af27c8`](https://github.com/dento34/medicase-orchestrator/commit/8af27c8)
+(audit hook shipped in [`1bffe5a`](https://github.com/dento34/medicase-orchestrator/commit/1bffe5a),
+LLM drug interaction in [`ec2c28f`](https://github.com/dento34/medicase-orchestrator/commit/ec2c28f),
+patient app in [`761cb7d`](https://github.com/dento34/medicase-orchestrator/commit/761cb7d))
