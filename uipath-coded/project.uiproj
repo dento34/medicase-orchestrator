@@ -1,0 +1,6 @@
+{
+  "ProjectType": "Agent",
+  "Name": "medicase-coded-summary",
+  "Description": "MediCase SummaryAgent \u2014 UiPath coded agent (Maestro Stage 3 handoff)",
+  "MainFile": null
+}

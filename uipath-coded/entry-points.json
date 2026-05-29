@@ -1,0 +1,480 @@
+{
+    "$schema": "https://cloud.uipath.com/draft/2024-12/entry-point",
+    "$id": "entry-points.json",
+    "entryPoints": [
+        {
+            "filePath": "LanguageAgent",
+            "uniqueId": "c37b85ea-712c-43a3-9d39-d1aa70bbc729",
+            "type": "agent",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "op": {
+                        "default": "detect",
+                        "description": "detect | translate | parse",
+                        "title": "Op",
+                        "type": "string"
+                    },
+                    "case_id": {
+                        "title": "Case Id",
+                        "type": "string"
+                    },
+                    "patient_utterance": {
+                        "type": "string"
+                    },
+                    "volunteer_utterance": {
+                        "type": "string"
+                    },
+                    "browser_locale": {
+                        "type": "string"
+                    },
+                    "language": {
+                        "additionalProperties": true,
+                        "type": "object"
+                    },
+                    "questions_en": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array"
+                    },
+                    "reply": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "case_id"
+                ],
+                "title": "LanguageInput"
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "result": {
+                        "additionalProperties": true,
+                        "description": "Detection result, translated questions, or parsed reply",
+                        "title": "Result",
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "result"
+                ],
+                "title": "LanguageOutput"
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "main_language.py:37",
+                        "name": "main",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main_language.py"
+                        }
+                    },
+                    {
+                        "id": "agents/uipath/language_entry.py:45",
+                        "name": "run",
+                        "type": "function",
+                        "metadata": {
+                            "file": "agents/uipath/language_entry.py"
+                        }
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "main_language.py:37",
+                        "target": "agents/uipath/language_entry.py:45"
+                    }
+                ]
+            }
+        },
+        {
+            "filePath": "RTSLookupAgent",
+            "uniqueId": "52071e3d-4de0-40ef-87d7-777ef110c8f1",
+            "type": "agent",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "case_id": {
+                        "title": "Case Id",
+                        "type": "string"
+                    },
+                    "lat": {
+                        "description": "Patient latitude",
+                        "title": "Lat",
+                        "type": "number"
+                    },
+                    "lon": {
+                        "description": "Patient longitude",
+                        "title": "Lon",
+                        "type": "number"
+                    },
+                    "medications": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "title": "Medications",
+                        "type": "array"
+                    },
+                    "proposed_treatments": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "title": "Proposed Treatments",
+                        "type": "array"
+                    },
+                    "patient_conditions": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "title": "Patient Conditions",
+                        "type": "array"
+                    },
+                    "aed_radius_m": {
+                        "default": 200,
+                        "description": "AED search radius (m)",
+                        "title": "Aed Radius M",
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "case_id",
+                    "lat",
+                    "lon"
+                ],
+                "title": "RtsInput"
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "result": {
+                        "additionalProperties": true,
+                        "description": "RTSLookupResult: AEDs, ambulance ETA, drug warnings",
+                        "title": "Result",
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "result"
+                ],
+                "title": "RtsOutput"
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "main_rts.py:32",
+                        "name": "main",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main_rts.py"
+                        }
+                    },
+                    {
+                        "id": "agents/uipath/rts_entry.py:33",
+                        "name": "run",
+                        "type": "function",
+                        "metadata": {
+                            "file": "agents/uipath/rts_entry.py"
+                        }
+                    },
+                    {
+                        "id": "agents/shared/llm.py:82",
+                        "name": "make_client",
+                        "type": "function",
+                        "metadata": {
+                            "file": "agents/shared/llm.py"
+                        }
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "agents/uipath/rts_entry.py:33",
+                        "target": "agents/shared/llm.py:82"
+                    },
+                    {
+                        "source": "main_rts.py:32",
+                        "target": "agents/uipath/rts_entry.py:33"
+                    }
+                ]
+            }
+        },
+        {
+            "filePath": "SummaryAgent",
+            "uniqueId": "68b49b2d-dc41-44e1-80a2-e4eedf72d41a",
+            "type": "agent",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "case_id": {
+                        "title": "Case Id",
+                        "type": "string"
+                    },
+                    "patient": {
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "approx_age": {
+                                "type": "string"
+                            },
+                            "sex": {
+                                "type": "string"
+                            },
+                            "language_name": {
+                                "type": "string"
+                            },
+                            "language_code": {
+                                "type": "string"
+                            },
+                            "symptoms": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "title": "Symptoms",
+                                "type": "array"
+                            },
+                            "pain_location": {
+                                "type": "string"
+                            },
+                            "pain_scale": {
+                                "type": "integer"
+                            },
+                            "allergies": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "title": "Allergies",
+                                "type": "array"
+                            },
+                            "medications": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "title": "Medications",
+                                "type": "array"
+                            },
+                            "chronic_conditions": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "title": "Chronic Conditions",
+                                "type": "array"
+                            },
+                            "wearable_snapshot": {
+                                "additionalProperties": true,
+                                "type": "object"
+                            }
+                        },
+                        "title": "PatientSnapshotIn",
+                        "type": "object"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "nearest_aed": {
+                        "type": "string"
+                    },
+                    "ambulance_eta_min": {
+                        "type": "integer"
+                    },
+                    "drug_warnings": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "title": "Drug Warnings",
+                        "type": "array"
+                    },
+                    "handed_off_by": {
+                        "type": "string"
+                    },
+                    "accepted_by": {
+                        "type": "string"
+                    },
+                    "with_impression": {
+                        "default": false,
+                        "description": "If true, adds an LLM clinical impression (needs API key).",
+                        "title": "With Impression",
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "case_id",
+                    "patient"
+                ],
+                "title": "SummaryInput"
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "rendered_text": {
+                        "description": "Human-readable handoff card",
+                        "title": "Rendered Text",
+                        "type": "string"
+                    },
+                    "report": {
+                        "additionalProperties": true,
+                        "description": "Structured HandoffReport",
+                        "title": "Report",
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "rendered_text",
+                    "report"
+                ],
+                "title": "SummaryOutput"
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "main.py:54",
+                        "name": "main",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main.py"
+                        }
+                    },
+                    {
+                        "id": "agents/uipath/summary_entry.py:39",
+                        "name": "run",
+                        "type": "function",
+                        "metadata": {
+                            "file": "agents/uipath/summary_entry.py"
+                        }
+                    },
+                    {
+                        "id": "agents/shared/llm.py:82",
+                        "name": "make_client",
+                        "type": "function",
+                        "metadata": {
+                            "file": "agents/shared/llm.py"
+                        }
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "agents/uipath/summary_entry.py:39",
+                        "target": "agents/shared/llm.py:82"
+                    },
+                    {
+                        "source": "main.py:54",
+                        "target": "agents/uipath/summary_entry.py:39"
+                    }
+                ]
+            }
+        },
+        {
+            "filePath": "ComplianceAgent",
+            "uniqueId": "8f9e42be-8d26-4e17-a3ee-92cbaa1fb32d",
+            "type": "agent",
+            "input": {
+                "type": "object",
+                "properties": {
+                    "op": {
+                        "default": "log",
+                        "description": "log | close | similar | trail",
+                        "title": "Op",
+                        "type": "string"
+                    },
+                    "case_id": {
+                        "type": "string"
+                    },
+                    "kind": {
+                        "type": "string"
+                    },
+                    "actor": {
+                        "type": "string"
+                    },
+                    "summary": {
+                        "type": "string"
+                    },
+                    "payload": {
+                        "additionalProperties": true,
+                        "type": "object"
+                    },
+                    "opened_at": {
+                        "type": "string"
+                    },
+                    "language_code": {
+                        "type": "string"
+                    },
+                    "age": {
+                        "type": "integer"
+                    },
+                    "sex": {
+                        "type": "string"
+                    },
+                    "symptom_cluster": {
+                        "type": "string"
+                    },
+                    "severity": {
+                        "type": "string"
+                    },
+                    "interventions": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "title": "Interventions",
+                        "type": "array"
+                    },
+                    "outcome": {
+                        "type": "string"
+                    },
+                    "event_venue_type": {
+                        "type": "string"
+                    },
+                    "limit": {
+                        "default": 5,
+                        "description": "similar: max prior cases",
+                        "title": "Limit",
+                        "type": "integer"
+                    }
+                },
+                "required": [],
+                "title": "ComplianceInput"
+            },
+            "output": {
+                "type": "object",
+                "properties": {
+                    "result": {
+                        "additionalProperties": true,
+                        "description": "audit event, anonymized record, similar cases, or trail",
+                        "title": "Result",
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "result"
+                ],
+                "title": "ComplianceOutput"
+            },
+            "graph": {
+                "nodes": [
+                    {
+                        "id": "main_compliance.py:41",
+                        "name": "main",
+                        "type": "function",
+                        "metadata": {
+                            "file": "main_compliance.py"
+                        }
+                    },
+                    {
+                        "id": "agents/uipath/compliance_entry.py:64",
+                        "name": "run",
+                        "type": "function",
+                        "metadata": {
+                            "file": "agents/uipath/compliance_entry.py"
+                        }
+                    }
+                ],
+                "edges": [
+                    {
+                        "source": "main_compliance.py:41",
+                        "target": "agents/uipath/compliance_entry.py:64"
+                    }
+                ]
+            }
+        }
+    ]
+}
