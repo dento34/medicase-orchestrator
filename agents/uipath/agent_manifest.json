@@ -1,0 +1,53 @@
+{
+  "_comment": "Descriptors for the 4 MediCase coded agents. Maps each Maestro Case stage to the coded-agent entry-point it invokes. UiPath SDK registration metadata is filled in during Labs integration.",
+  "agents": [
+    {
+      "name": "LanguageAgent",
+      "stage": "1-intake",
+      "entry": "agents.uipath.language_entry:run",
+      "ops": ["detect", "translate", "parse"],
+      "type": "coded",
+      "description": "Language detection + in-language triage + reply parsing"
+    },
+    {
+      "name": "RTSLookupAgent",
+      "stage": "2-stabilization",
+      "entry": "agents.uipath.rts_entry:run",
+      "ops": ["lookup"],
+      "type": "coded",
+      "description": "Parallel AED + drug-interaction + ambulance ETA lookup"
+    },
+    {
+      "name": "SummaryAgent",
+      "stage": "3-handoff",
+      "entry": "agents.uipath.summary_entry:run",
+      "ops": ["build"],
+      "type": "coded",
+      "description": "Template-driven English handoff + optional AI impression"
+    },
+    {
+      "name": "ComplianceAgent",
+      "stage": "4-postincident",
+      "entry": "agents.uipath.compliance_entry:run",
+      "ops": ["log", "close", "similar", "trail"],
+      "type": "coded",
+      "description": "Audit trail + anonymized case memory + learning loop"
+    }
+  ],
+  "low_code_agents": [
+    {
+      "name": "TriageAgent",
+      "stage": "1-intake",
+      "type": "agent-builder",
+      "status": "to-be-built-in-uipath",
+      "description": "Symptom severity + condition cluster classification"
+    },
+    {
+      "name": "RoutingAgent",
+      "stage": "2-stabilization",
+      "type": "agent-builder",
+      "status": "to-be-built-in-uipath",
+      "description": "Specialist selection by specialty + proximity + load"
+    }
+  ]
+}
