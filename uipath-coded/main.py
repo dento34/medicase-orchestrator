@@ -36,6 +36,44 @@ _ROUTES = {
     "compliance": compliance_entry.run,
 }
 
+# Fields the underlying agents type as list[str]. When Maestro passes them
+# from String process arguments they arrive as comma-separated strings; we
+# split them transparently so the typed agent contracts hold without the
+# canvas needing to know about List<String> (which Maestro's arg picker
+# doesn't expose).
+_LIST_FIELDS = {
+    "medications",
+    "proposed_treatments",
+    "patient_conditions",
+    "symptoms",
+    "allergies",
+    "chronic_conditions",
+    "drug_warnings",
+    "interventions",
+}
+
+
+def _split_csv(value: str) -> list[str]:
+    return [s.strip() for s in value.split(",") if s.strip()]
+
+
+def _normalize(payload: dict[str, Any]) -> dict[str, Any]:
+    """Normalize string list-fields to actual lists, top-level and under `patient`."""
+    out = dict(payload)
+    for k in _LIST_FIELDS:
+        v = out.get(k)
+        if isinstance(v, str):
+            out[k] = _split_csv(v)
+    patient = out.get("patient")
+    if isinstance(patient, dict):
+        p = dict(patient)
+        for k in _LIST_FIELDS:
+            v = p.get(k)
+            if isinstance(v, str):
+                p[k] = _split_csv(v)
+        out["patient"] = p
+    return out
+
 
 class DispatchInput(BaseModel):
     agent: str = Field(description="language | rts | summary | compliance")
@@ -58,4 +96,4 @@ def main(input: DispatchInput) -> DispatchOutput:
             f"Unknown agent {input.agent!r}. "
             f"Expected one of: {', '.join(_ROUTES)}"
         )
-    return DispatchOutput(agent=key, result=fn(input.payload))
+    return DispatchOutput(agent=key, result=fn(_normalize(input.payload)))
