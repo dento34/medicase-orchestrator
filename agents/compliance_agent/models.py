@@ -16,6 +16,10 @@ AuditEventKind = Literal[
     "exception_raised",
     "stage_transition",
     "case_closed",
+    # Orchestration-completion variants (final stage emits one of these to
+    # signal the whole MediCase flow has wrapped up):
+    "case_completed",
+    "case_resolved",
 ]
 
 
